@@ -24,8 +24,8 @@ export default function Urgency() {
               <p className="mt-4 text-lg leading-8 text-muted">
                 I will review your page, your content, and your current offer and tell
                 you exactly what is stopping clients from coming in and I tell you what
-                I&apos;d fix first. No pressure. No agenda. Just a free one on one
-                Consultation to figure it out how you can onboard More Clients.
+                I&apos;d fix first. No pressure. No agenda. Just a free conversation to
+                figure out what&apos;s actually blocking your clients.
               </p>
             </div>
 

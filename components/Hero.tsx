@@ -14,10 +14,10 @@ export default function Hero({ ctaText }: HeroProps) {
             <Image
               src="/yogesh-kaphle-logo.png"
               alt="Yogesh Kaphle"
-              width={144}
-              height={44}
+              width={208}
+              height={64}
               priority
-              className="h-9 w-auto sm:h-10"
+              className="h-13 w-auto sm:h-14"
             />
           </a>
           <a
@@ -66,10 +66,6 @@ export default function Hero({ ctaText }: HeroProps) {
         <div className="mt-8 rounded-full border border-line bg-[#0b0d0a]/75 px-5 py-4 text-center text-sm text-[#d9cfbc] shadow-[0_18px_40px_rgba(0,0,0,0.18)]">
           Built for fitness coaches in Nepal who are tired of posting into silence
           without getting clients they deserves.
-        </div>
-        <div className="mt-5 text-center text-sm text-muted">
-          Built from real page reviews across the Nepal fitness coaching market - the
-          same five gaps show up every time.
         </div>
       </div>
     </section>

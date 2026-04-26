@@ -14,15 +14,9 @@ export default function Benefits({ items }: BenefitsProps) {
         </div>
 
         <div className="mt-12 grid gap-4 md:grid-cols-2">
-          {items.map((item, index) => (
-            <article
-              key={item}
-              className="glass-panel rounded-[1.8rem] p-6 sm:p-7"
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">
-                Card {index + 1}
-              </p>
-              <p className="mt-4 text-base leading-8 text-[#e4dac8] sm:text-lg">{item}</p>
+          {items.map((item) => (
+            <article key={item} className="glass-panel rounded-[1.8rem] p-6 sm:p-7">
+              <p className="text-base leading-8 text-[#e4dac8] sm:text-lg">{item}</p>
             </article>
           ))}
         </div>
