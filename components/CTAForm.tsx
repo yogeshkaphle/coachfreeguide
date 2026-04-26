@@ -7,9 +7,7 @@ type FormValues = {
   name: string;
   whatsapp: string;
   email: string;
-  website: string;
   struggle: string;
-  message: string;
 };
 
 type FormErrors = Partial<Record<keyof FormValues, string>>;
@@ -18,9 +16,7 @@ const initialValues: FormValues = {
   name: "",
   whatsapp: "",
   email: "",
-  website: "",
   struggle: "",
-  message: "",
 };
 
 const struggleOptions = [
@@ -29,7 +25,6 @@ const struggleOptions = [
   "I don't know what content is actually working",
   "My page is growing but my income isn't",
   "I tried boosting posts but wasted money and got nothing",
-  "I'm not sure where to even start",
   "Something else",
 ];
 
@@ -92,7 +87,7 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
       className="glass-panel rounded-[2rem] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.35)] sm:p-8"
     >
       <div className="mb-6">
-        <p className="section-label">Get The Guide</p>
+        <p className="section-label">Get The Checklist</p>
         <h2 className="mt-3 font-display text-3xl font-semibold text-foreground sm:text-4xl">
           Where should I send it?
         </h2>
@@ -145,20 +140,6 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
         </div>
 
         <div>
-          <label className="text-sm font-medium text-[#f4eddf]" htmlFor="website">
-            Website/Social Media page link
-          </label>
-          <input
-            id="website"
-            type="url"
-            placeholder="Optional"
-            value={values.website}
-            onChange={(event) => updateField("website", event.target.value)}
-            className={fieldClassName}
-          />
-        </div>
-
-        <div>
           <label className="text-sm font-medium text-[#f4eddf]" htmlFor="struggle">
             What&apos;s your biggest struggle right now?
           </label>
@@ -176,19 +157,6 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
             ))}
           </select>
           {errors.struggle ? <p className={errorClassName}>{errors.struggle}</p> : null}
-        </div>
-
-        <div>
-          <label className="text-sm font-medium text-[#f4eddf]" htmlFor="message">
-            Anything you want to say
-          </label>
-          <textarea
-            id="message"
-            placeholder="Optional"
-            value={values.message}
-            onChange={(event) => updateField("message", event.target.value)}
-            className={`${fieldClassName} min-h-28 resize-none`}
-          />
         </div>
 
         <div className="space-y-3 pt-2">

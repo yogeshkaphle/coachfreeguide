@@ -50,8 +50,8 @@ export default function HomePage() {
                 <p className="section-label">Who Made This</p>
                 <h2 className="mt-4 section-heading">A coach who&apos;s been where you are.</h2>
                 <p className="body-copy mt-6">
-                  I&apos;m Yogesh Kaphle. IFPA-certified Fitness Coach. Digital marketing
-                  Expert. I&apos;ve reviewed coaching pages across Nepal. The same five
+                  I&apos;m Yogesh Kaphle. IFPA-certified Fitness Coach. Digital Marketing
+                  Specialist. I&apos;ve reviewed coaching pages across Nepal. The same five
                   gaps show up every time. That&apos;s why I made this.
                 </p>
 

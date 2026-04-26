@@ -24,7 +24,7 @@ export default function Hero({ ctaText }: HeroProps) {
             href="#lead-form"
             className="rounded-full border border-accent/40 bg-accent/12 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#f1e8d7] hover:border-accent/70 hover:bg-accent/18"
           >
-            Get the Free Guide
+            Get the Checklist
           </a>
         </nav>
 
@@ -34,7 +34,7 @@ export default function Hero({ ctaText }: HeroProps) {
             <div className="relative z-10">
               <div>
                 <p className="section-label">
-                  Free Guide For Nepali Fitness Coaches to get More Clients
+                  Free Checklist For Nepali Fitness Coaches to get More Clients
                 </p>
                 <h1 className="mt-5 max-w-3xl font-display text-5xl font-semibold leading-[0.95] text-foreground sm:text-6xl lg:text-7xl">
                   You Post Every Day. So Why Aren&apos;t Clients Coming?
@@ -53,7 +53,7 @@ export default function Hero({ ctaText }: HeroProps) {
                     Send Me the Free Checklist -&gt;
                   </a>
                   <p className="text-sm text-muted">
-                    Free. Instant. No spam. Just honest clarity Guide.
+                    Free. Instant. No pitch. Just honest clarity.
                   </p>
                 </div>
               </div>
@@ -66,6 +66,10 @@ export default function Hero({ ctaText }: HeroProps) {
         <div className="mt-8 rounded-full border border-line bg-[#0b0d0a]/75 px-5 py-4 text-center text-sm text-[#d9cfbc] shadow-[0_18px_40px_rgba(0,0,0,0.18)]">
           Built for fitness coaches in Nepal who are tired of posting into silence
           without getting clients they deserves.
+        </div>
+        <div className="mt-5 text-center text-sm text-muted">
+          Built from real page reviews across the Nepal fitness coaching market - the
+          same five gaps show up every time.
         </div>
       </div>
     </section>

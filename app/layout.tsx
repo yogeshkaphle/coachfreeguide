@@ -16,7 +16,7 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   metadataBase: new URL("https://coachfreeguide.yogeshkaphle.com"),
   title: {
-    default: "Free Guide for Nepali Fitness Coaches | Yogesh Kaphle",
+    default: "Free Checklist for Nepali Fitness Coaches | Yogesh Kaphle",
     template: "%s | Yogesh Kaphle",
   },
   description:
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "You Post Every Day. So Why Aren't Clients Coming?",
     description:
-      "Free guide for Nepali fitness coaches to find the gaps that stop content from turning into paying clients.",
+      "Free checklist for Nepali fitness coaches to find the gaps that stop content from turning into paying clients.",
     url: "https://coachfreeguide.yogeshkaphle.com",
     siteName: "Yogesh Kaphle",
     images: [
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "You Post Every Day. So Why Aren't Clients Coming?",
     description:
-      "Free guide for Nepali fitness coaches to see what is blocking clients from reaching out.",
+      "Free checklist for Nepali fitness coaches to see what is blocking clients from reaching out.",
     images: ["/hero-image.jpg"],
   },
 };
