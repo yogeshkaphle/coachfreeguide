@@ -84,10 +84,10 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
   return (
     <div
       id="lead-form"
-      className="glass-panel rounded-[2rem] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.35)] sm:p-8"
+      className="glass-panel rounded-[2rem] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.35)] sm:p-8 lg:h-full"
     >
       <div className="mb-6">
-        <p className="section-label">Get The Checklist</p>
+        <p className="section-label">Get The System</p>
         <h2 className="mt-3 font-display text-3xl font-semibold text-foreground sm:text-4xl">
           Where should I send it?
         </h2>
@@ -131,6 +131,7 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
           <input
             id="email"
             type="email"
+            required
             placeholder="Enter your active email"
             value={values.email}
             onChange={(event) => updateField("email", event.target.value)}
@@ -149,7 +150,7 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
             onChange={(event) => updateField("struggle", event.target.value)}
             className={fieldClassName}
           >
-            <option value="">Select your answer</option>
+            <option value="" disabled>Select one...</option>
             {struggleOptions.map((option) => (
               <option key={option} value={option}>
                 {option}

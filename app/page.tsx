@@ -6,38 +6,38 @@ import Urgency from "@/components/Urgency";
 
 const zones = [
   {
-    title: "Who You're Actually Talking To",
-    body: "If your page speaks to everyone, it reaches no one. Find out if your ideal client can actually see themselves in your content.",
+    title: "Know Exactly Who You Serve",
+    body: "When you talk to everyone, you connect with no one. Find out how to choose your ideal client — even if you've been coaching everyone for years.",
   },
   {
-    title: "What You're Actually Offering",
-    body: "\"DM for details\" is not an offer. Find out if a stranger landing on your page knows what you sell - in under 10 seconds.",
+    title: "Build an Offer Clients Actually Want",
+    body: "People don't buy coaching. They buy outcomes. Learn how to package your service so a stranger reads it and thinks 'this is for me.'",
   },
   {
-    title: "What You're Actually Saying",
-    body: "Your content should make your client think \"this person gets me\" - not \"good for you, bro.\" Find out which one yours does.",
+    title: "Build Trust Before You Ask for Anything",
+    body: "Posting more isn't the answer. Posting with purpose is. Learn the three trust signals that move strangers toward becoming clients.",
   },
   {
-    title: "How You're Actually Being Trusted",
-    body: "Attention doesn't pay your rent. Trust does. Find out whether your page builds it - or quietly destroys it.",
+    title: "Get In Front of Them — Even With 100 Followers",
+    body: "Stop waiting for the algorithm. Learn how a simple landing page and small daily ad budget can bring you leads in 3-7 days, not 12 months.",
   },
   {
-    title: "What Happens When Someone Shows Up",
-    body: "Most coaches lose 70% of interested leads not because of bad content - but because nothing happens after someone reaches out. Find out if you have a system or just hope.",
+    title: "Sign Them. Deliver. Scale Without Burning Out",
+    body: "Lead does not equal client. Client does not equal retained client. Learn the consultation, onboarding, and delivery system that protects your time as you grow.",
   },
 ];
 
 const whoItsFor = [
-  "You've been posting consistently for months - but your DMs are mostly other coaches, not potential clients.",
-  "Someone asks about your services, you reply, and then they go quiet. You don't know what went wrong.",
-  "You know you're a good coach. You just don't know why the page isn't reflecting that to the people who need you.",
-  "You've tried boosting posts. You've tried reels. You've tried posting more. Nothing is moving the needle on actual paid clients.",
+  "You've been posting consistently for months — but the people messaging you are mostly other coaches, not clients.",
+  "You have a few clients, but you're stuck. Same revenue every month. Same exhaustion. No clear way to grow.",
+  "You know you're a good coach. You just don't know why your page isn't reflecting that to the people who actually need you.",
+  "You've tried boosting posts, posting reels, posting more. None of it has moved the needle on actual paid clients.",
 ];
 
 export default function HomePage() {
   return (
     <main id="top" className="relative overflow-x-hidden pb-28 md:pb-0">
-      <Hero ctaText="Send Me the Checklist ->" />
+      <Hero ctaText="Send Me the System ->" />
       <Problem zones={zones} />
       <Benefits items={whoItsFor} />
 
@@ -50,37 +50,14 @@ export default function HomePage() {
                 <p className="section-label">Who Made This</p>
                 <h2 className="mt-4 section-heading">A coach who&apos;s been where you are.</h2>
                 <p className="body-copy mt-6">
-                  I&apos;m Yogesh Kaphle. IFPA-certified Fitness Coach. Digital Marketing
-                  Specialist. I&apos;ve reviewed coaching pages across Nepal. The same five
-                  gaps show up every time. That&apos;s why I made this.
+                  I&apos;m Yogesh Kaphle. Certified fitness coach. Digital marketer. I built this system because I watched too many great coaches in Nepal stay invisible online — while average coaches with marketing skills got all the clients. That&apos;s the gap I want to fix. Not by competing with you — by handing you what I learned the hard way.
                 </p>
-
-                <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-[1.5rem] border border-accent/20 bg-[#10130f] p-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">
-                      Built From
-                    </p>
-                    <p className="mt-3 text-base leading-7 text-[#e5dac8]">
-                      Real page reviews, real coaching offers, and real gaps repeated
-                      across the Nepal market.
-                    </p>
-                  </div>
-                  <div className="rounded-[1.5rem] border border-accent/20 bg-[#10130f] p-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">
-                      Why This Helps
-                    </p>
-                    <p className="mt-3 text-base leading-7 text-[#e5dac8]">
-                      It shows what&apos;s unclear before another potential client lands,
-                      gets confused, and leaves.
-                    </p>
-                  </div>
-                </div>
               </article>
 
-              <article className="relative overflow-hidden rounded-[1.8rem] border border-[#7b715b33] bg-[linear-gradient(180deg,#10130f_0%,#090a08_100%)] p-3 shadow-[0_24px_80px_rgba(0,0,0,0.28)]">
+              <article className="relative overflow-hidden rounded-[1.8rem] border border-[#7b715b33] bg-[linear-gradient(180deg,#10130f_0%,#090a08_100%)] p-3 shadow-[0_24px_80px_rgba(0,0,0,0.28)] lg:aspect-[4/3]">
                 <div className="absolute -left-8 top-12 h-32 w-32 rounded-full bg-brand/30 blur-3xl" />
                 <div className="absolute -right-10 bottom-8 h-40 w-40 rounded-full bg-accent/16 blur-3xl" />
-                <div className="relative overflow-hidden rounded-[1.5rem]">
+                <div className="relative h-full overflow-hidden rounded-[1.5rem]">
                   <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_32%,rgba(9,10,8,0.18)_66%,rgba(9,10,8,0.92)_100%)]" />
                   <Image
                     src="/hero-image.jpg"
@@ -107,14 +84,13 @@ export default function HomePage() {
           href="#lead-form"
           className="flex items-center justify-center rounded-full bg-accent px-5 py-3 text-sm font-semibold text-[#17150f]"
         >
-          Get the Free Checklist -&gt;
+          Send Me the System -&gt;
         </a>
       </div>
 
       <footer className="border-t border-line py-8">
         <div className="section-shell text-center text-sm text-muted">
-          &copy; 2026 Yogesh Kaphle | yogeshkaphle.com Fitness Inside Out. Business
-          Built In.
+          &copy; 2026 Yogesh Kaphle | yogeshkaphle.com &mdash; Fitness Inside Out. Business Built In.
         </div>
       </footer>
     </main>

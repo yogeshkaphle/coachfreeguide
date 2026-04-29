@@ -16,15 +16,15 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   metadataBase: new URL("https://coachfreeguide.yogeshkaphle.com"),
   title: {
-    default: "Free Checklist for Nepali Fitness Coaches | Yogesh Kaphle",
+    default: "The 5-Step Coach System | Yogesh Kaphle",
     template: "%s | Yogesh Kaphle",
   },
   description:
-    "Download the free checklist for fitness coaches in Nepal and find out where your page is losing serious clients before they even reach out.",
+    "From viewer to paying client — the free system for Nepali fitness coaches. Video, mind map, and worksheet. No fluff.",
   openGraph: {
-    title: "You Post Every Day. So Why Aren't Clients Coming?",
+    title: "The 5-Step Coach System | Yogesh Kaphle",
     description:
-      "Free checklist for Nepali fitness coaches to find the gaps that stop content from turning into paying clients.",
+      "From viewer to paying client — the free system for Nepali fitness coaches. Video, mind map, and worksheet. No fluff.",
     url: "https://coachfreeguide.yogeshkaphle.com",
     siteName: "Yogesh Kaphle",
     images: [
@@ -40,9 +40,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "You Post Every Day. So Why Aren't Clients Coming?",
+    title: "The 5-Step Coach System | Yogesh Kaphle",
     description:
-      "Free checklist for Nepali fitness coaches to see what is blocking clients from reaching out.",
+      "From viewer to paying client — the free system for Nepali fitness coaches. Video, mind map, and worksheet. No fluff.",
     images: ["/hero-image.jpg"],
   },
 };
