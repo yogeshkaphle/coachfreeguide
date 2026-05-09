@@ -1,54 +1,90 @@
+// TODO: Install Meta Pixel base code site-wide in app/layout.tsx before launching ads
+// TODO: Once installed, add fbq('track', 'Lead'); inside useEffect on this page
+
 import type { Metadata } from "next";
-import Link from "next/link";
+import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "Thank You",
+  title: "Welcome — Your 5-Step System Is Ready",
   description:
-    "Your request is in. Check your email and WhatsApp for the next steps from Yogesh Kaphle.",
+    "Your free system is here. Watch the video, then check WhatsApp for the mind map and worksheet.",
 };
 
 export default function ThankYouPage() {
   return (
-    <main className="relative flex min-h-screen items-center py-10">
+    <main className="min-h-screen py-8 sm:py-12">
+      {/* Logo only — no nav links */}
       <div className="section-shell">
-        <div className="mx-auto max-w-3xl rounded-[2rem] border border-line bg-surface p-8 text-center shadow-[0_28px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-12">
+        <div className="mb-10 sm:mb-14">
+          <Image
+            src="/yogesh-kaphle-logo.png"
+            alt="Yogesh Kaphle"
+            width={208}
+            height={64}
+            priority
+            className="h-10 w-auto sm:h-14"
+          />
+        </div>
+
+        {/* Hero */}
+        <div className="mx-auto max-w-3xl text-center">
           <p className="section-label">You&apos;re In</p>
-          <h1 className="mt-4 font-display text-5xl font-semibold text-foreground sm:text-6xl">
-            Your request is on the way.
+          <h1 className="mt-5 font-display text-5xl font-semibold leading-none text-foreground sm:text-6xl lg:text-7xl">
+            Welcome — Your 5-Step System Is Ready
           </h1>
           <p className="mt-6 text-lg leading-8 text-muted sm:text-xl">
-            Check your email for the checklist, then keep an eye on WhatsApp. I&apos;ll
-            follow up personally to see what you found and whether the gaps make sense
-            for your page.
+            Watch the video below. The mind map and worksheet are landing in your WhatsApp right now.
           </p>
+        </div>
 
-          <div className="mt-8 rounded-[1.6rem] border border-accent/20 bg-[#0d100c] p-6 text-left">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-accent">
-              Next Steps
-            </p>
-            <ul className="mt-4 space-y-3 text-base leading-7 text-[#e6dccb]">
-              <li>Check your inbox for the free PDF checklist.</li>
-              <li>Open WhatsApp later for a personal follow-up.</li>
-              <li>Go through the questions honestly and note the gaps you notice.</li>
-            </ul>
-          </div>
-
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link
-              href="/"
-              className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-[#17150f] hover:bg-[#b6a180]"
-            >
-              Back to the Guide Page
-            </Link>
-            <a
-              href="https://yogeshkaphle.com"
-              className="rounded-full border border-accent/35 px-6 py-3 text-sm font-semibold text-[#efe4d2] hover:border-accent/65 hover:bg-accent/10"
-            >
-              Visit yogeshkaphle.com
-            </a>
+        {/* Video — 16:9 responsive, max 900px centered */}
+        <div className="mx-auto mt-10 max-w-[900px] sm:mt-12">
+          <div
+            className="relative overflow-hidden rounded-xl"
+            style={{ paddingBottom: "56.25%", height: 0 }}
+          >
+            <iframe
+              src="https://www.youtube.com/embed/PLACEHOLDER_VIDEO_ID?rel=0"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                border: 0,
+              }}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
         </div>
+
+        {/* WhatsApp CTA */}
+        <div className="mx-auto mt-14 max-w-2xl text-center sm:mt-20">
+          <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl">
+            Stuck on any step? Message me.
+          </h2>
+          <p className="mt-5 text-base leading-7 text-muted sm:text-lg sm:leading-8">
+            Watch the video, fill the worksheet, and if you want a real coach-to-coach conversation about your specific situation — send your filled worksheet to me on WhatsApp. I go through every one personally. No bot. No pitch. Just an honest answer on what I&apos;d fix first.
+          </p>
+          <a
+            href="https://wa.me/85362830217?text=Hi%20Yogesh%2C%20I%20just%20got%20the%205-Step%20Coach%20System%20and%20wanted%20to%20talk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 block w-full rounded-full bg-accent px-8 py-4 text-base font-semibold text-[#17150f] shadow-[0_22px_50px_rgba(166,146,115,0.22)] hover:bg-[#b6a180] sm:mx-auto sm:w-fit sm:px-10"
+          >
+            Message Yogesh on WhatsApp →
+          </a>
+          <p className="mt-4 text-sm text-muted">
+            I usually reply within a few hours.
+          </p>
+        </div>
       </div>
+
+      {/* Footer */}
+      <footer className="mt-16 pb-8 text-center text-xs text-muted sm:mt-24">
+        © 2026 Yogesh Kaphle | yogeshkaphle.com — Fitness Inside Out. Business Built In.
+      </footer>
     </main>
   );
 }
