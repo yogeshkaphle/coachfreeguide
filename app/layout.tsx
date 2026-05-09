@@ -14,7 +14,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://coachfreeguide.yogeshkaphle.com"),
+  metadataBase: new URL("https://start.yogeshkaphle.com"),
   title: {
     default: "The 5-Step Coach System | Yogesh Kaphle",
     template: "%s | Yogesh Kaphle",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     title: "The 5-Step Coach System | Yogesh Kaphle",
     description:
       "From viewer to paying client — the free system for Nepali fitness coaches. Video, mind map, and worksheet. No fluff.",
-    url: "https://coachfreeguide.yogeshkaphle.com",
+    url: "https://start.yogeshkaphle.com",
     siteName: "Yogesh Kaphle",
     images: [
       {
