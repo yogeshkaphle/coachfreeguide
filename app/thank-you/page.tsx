@@ -33,7 +33,7 @@ export default function ThankYouPage() {
             Welcome — Your 5-Step System Is Ready
           </h1>
           <p className="mt-6 text-lg leading-8 text-muted sm:text-xl">
-            Watch the video below. The mind map and worksheet are landing in your WhatsApp right now.
+            Your Mind Map and Worksheet are ready below — I&apos;ll also follow up on WhatsApp personally.
           </p>
         </div>
 
@@ -59,6 +59,26 @@ export default function ThankYouPage() {
           </div>
         </div>
 
+        {/* Kit Links */}
+        <div className="mx-auto mt-10 flex flex-col items-center gap-4 sm:mt-12 sm:flex-row sm:justify-center">
+          <a
+            href="/mindmap"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full rounded-full bg-accent px-8 py-4 text-center text-base font-semibold text-[#17150f] shadow-[0_22px_50px_rgba(166,146,115,0.22)] hover:bg-[#b6a180] sm:w-fit sm:px-10"
+          >
+            View the Mind Map →
+          </a>
+          <a
+            href="/worksheet"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full rounded-full bg-accent px-8 py-4 text-center text-base font-semibold text-[#17150f] shadow-[0_22px_50px_rgba(166,146,115,0.22)] hover:bg-[#b6a180] sm:w-fit sm:px-10"
+          >
+            Open the Worksheet →
+          </a>
+        </div>
+
         {/* WhatsApp CTA */}
         <div className="mx-auto mt-14 max-w-2xl text-center sm:mt-20">
           <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl">
@@ -73,7 +93,7 @@ export default function ThankYouPage() {
             rel="noopener noreferrer"
             className="mt-8 block w-full rounded-full bg-accent px-8 py-4 text-base font-semibold text-[#17150f] shadow-[0_22px_50px_rgba(166,146,115,0.22)] hover:bg-[#b6a180] sm:mx-auto sm:w-fit sm:px-10"
           >
-            Message Yogesh on WhatsApp →
+            Message me on WhatsApp →
           </a>
           <p className="mt-4 text-sm text-muted">
             I usually reply within a few hours.
