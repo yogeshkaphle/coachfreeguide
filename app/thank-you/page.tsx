@@ -65,7 +65,7 @@ export default function ThankYouPage() {
             href="/mindmap"
             target="_blank"
             rel="noopener noreferrer"
-            className="block w-full rounded-full bg-accent px-8 py-4 text-center text-base font-semibold text-[#17150f] shadow-[0_22px_50px_rgba(166,146,115,0.22)] hover:bg-[#b6a180] sm:w-fit sm:px-10"
+            className="block w-full rounded-full border-[1.5px] border-[#C2A96A] bg-transparent px-8 py-4 text-center text-base font-semibold text-[#C2A96A] hover:bg-[#C2A96A]/10 sm:w-fit sm:px-10"
           >
             View the Mind Map →
           </a>
@@ -73,7 +73,7 @@ export default function ThankYouPage() {
             href="/worksheet"
             target="_blank"
             rel="noopener noreferrer"
-            className="block w-full rounded-full bg-accent px-8 py-4 text-center text-base font-semibold text-[#17150f] shadow-[0_22px_50px_rgba(166,146,115,0.22)] hover:bg-[#b6a180] sm:w-fit sm:px-10"
+            className="block w-full rounded-full border-[1.5px] border-[#C2A96A] bg-transparent px-8 py-4 text-center text-base font-semibold text-[#C2A96A] hover:bg-[#C2A96A]/10 sm:w-fit sm:px-10"
           >
             Open the Worksheet →
           </a>
