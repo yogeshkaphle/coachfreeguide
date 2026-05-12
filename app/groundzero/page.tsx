@@ -493,11 +493,13 @@ export default function GroundZeroPage() {
                   ] as const
                 ).map((item, i) => (
                   <details key={i} className="group glass-panel overflow-hidden rounded-2xl">
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-base font-semibold text-foreground">
-                      <span>{item.q}</span>
-                      <span className="flex-shrink-0 text-xl text-accent transition-transform duration-200 group-open:rotate-45">
-                        +
-                      </span>
+                    <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                      <div className="flex items-center justify-between gap-4 px-6 py-5">
+                        <span className="text-base font-semibold text-foreground">{item.q}</span>
+                        <span className="shrink-0 text-xl text-accent transition-transform duration-200 group-open:rotate-45">
+                          +
+                        </span>
+                      </div>
                     </summary>
                     <div className="border-t border-line px-6 pb-6 pt-5">
                       <p className="text-sm leading-7 text-muted">{item.a}</p>
