@@ -155,10 +155,6 @@ export default function GroundZeroPage() {
                   <span className="mt-0.5 flex-shrink-0 font-semibold text-accent">—</span>
                   <p className="body-copy">You ran a free challenge. People joined. Two paid. The rest disappeared after day three.</p>
                 </div>
-                <div className="glass-panel flex gap-5 rounded-2xl p-5 sm:p-6">
-                  <span className="mt-0.5 flex-shrink-0 font-semibold text-accent">—</span>
-                  <p className="body-copy">You tried gym referrals. <NP>Tara scale kasari garne</NP> when someone else controls your clients and takes a 30–40% cut on top?</p>
-                </div>
               </div>
               <p className="mt-10 max-w-2xl body-copy">
                 None of this failed because you are a bad coach. It failed because there is no system underneath it. No pipeline. No conversion path. Just good content going into a black hole every month.
@@ -179,9 +175,7 @@ export default function GroundZeroPage() {
                     Yogesh Kaphle — Fitness Inside Out. Business Built In.
                   </h2>
                   <div className="mt-6 space-y-4 body-copy">
-                    <p>I am a certified personal trainer who learned digital marketing — and used it to build my own brand from zero. Now I do the same thing for coaches like you.</p>
-                    <p>Not a generic agency. Not a designer who has never picked up a kettlebell. I have lived the fitness world. I have lived the business side. I know what your week actually looks like.</p>
-                    <p>I am not here to sell you a system. I am here to build it with you.</p>
+                    <p>A certified coach who learned digital marketing the hard way and used it to build my own brand from zero. Now I build it for coaches like you, not as an agency selling a template, but as someone who has lived on both sides.</p>
                   </div>
                   <div className="mt-8">
                     <BookCallButton />
@@ -224,19 +218,19 @@ export default function GroundZeroPage() {
                     phase: "Phase 1",
                     time: "Week 1–2",
                     label: "Foundation",
-                    body: "Your niche, your ideal client, your offer — all defined. Your website and landing page go live. WhatsApp funnel ready. For the first time, your business is clearly defined online.",
+                    body: "Niche, offer, website, landing page, WhatsApp funnel — all built and live. Your business is finally defined online.",
                   },
                   {
                     phase: "Phase 2",
                     time: "Week 3–4",
                     label: "Activate",
-                    body: "Content strategy built for your specific niche. What to post, how often, what to say. Your authority starts building consistently. No more \"what should I post today?\"",
+                    body: "Content strategy locked to your niche. You know exactly what to post and why. Authority starts compounding.",
                   },
                   {
                     phase: "Phase 3",
                     time: "Month 2–3",
                     label: "Real Leads",
-                    body: "Meta Ads go live — conversion campaigns, Nepal specific. Real leads start coming in. Weekly check-ins to review what&apos;s working. Monthly performance audit. Every decision from data, not gut feeling.",
+                    body: "Meta Ads live. Real leads coming in. Weekly check-ins, monthly audits. Every decision from data.",
                   },
                 ] as const
               ).map((p) => (
@@ -386,85 +380,6 @@ export default function GroundZeroPage() {
           </div>
         </section>
 
-        {/* ── S9: THE JOURNEY BEYOND ── */}
-        <section className="border-t border-line py-18 sm:py-24">
-          <div className="section-shell">
-            <div className="mx-auto max-w-3xl text-center">
-              <p className="section-label">What Comes Next</p>
-              <h2 className="mt-4 section-heading">Ground Zero Is Where We Start.</h2>
-              <p className="mt-3 body-copy">What Comes Next Is Your Call.</p>
-            </div>
-            <div className="mt-14 grid gap-5 sm:grid-cols-3">
-              {(
-                [
-                  {
-                    tier: "Ground Zero",
-                    price: "39,000 NPR",
-                    duration: "One-time",
-                    current: true,
-                    body: "The foundation. The system. Clients start coming in. Website, offer, content system, Meta Ads — built and running in 90 days.",
-                  },
-                  {
-                    tier: "Mission Active",
-                    price: "15,000 NPR",
-                    duration: "Per month",
-                    current: false,
-                    body: "Scale what is working. Retargeting, WhatsApp and email follow-up sequences, lookalike audience scaling. The system keeps optimizing.",
-                  },
-                  {
-                    tier: "Total Command",
-                    price: "25,000 NPR",
-                    duration: "Per month",
-                    current: false,
-                    body: "Full co-pilot mode. Strategy, ads, content, and sales — the whole system running alongside you. You focus on coaching. I handle the rest.",
-                  },
-                ] as const
-              ).map((tier) => (
-                <article
-                  key={tier.tier}
-                  className={`relative flex flex-col rounded-[1.7rem] p-6 sm:p-7 ${
-                    tier.current
-                      ? "border border-accent/50 bg-[#0f1209] shadow-[0_0_60px_rgba(166,146,115,0.12)]"
-                      : "glass-panel opacity-75"
-                  }`}
-                >
-                  {tier.current && (
-                    <span className="absolute -top-3.5 left-6 rounded-full bg-accent px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[#17150f]">
-                      You Are Here
-                    </span>
-                  )}
-                  <p className="section-label">{tier.tier}</p>
-                  <p className="mt-3 font-display text-3xl font-semibold text-foreground">
-                    {tier.price}
-                  </p>
-                  <p className="text-xs text-muted">{tier.duration}</p>
-                  <p className="mt-4 flex-1 text-sm leading-7 text-muted">{tier.body}</p>
-                </article>
-              ))}
-            </div>
-            <p className="mx-auto mt-8 max-w-xl text-center text-sm text-muted">
-              No lock-in. After Ground Zero, you decide if you want to continue. If yes, we continue. If no, you keep everything that was built.
-            </p>
-          </div>
-        </section>
-
-        {/* ── S10: WHY I BUILT THIS ── */}
-        <section className="border-t border-line py-18 sm:py-24">
-          <div className="section-shell">
-            <div className="mx-auto max-w-2xl">
-              <p className="section-label">The Story Behind This</p>
-              <h2 className="mt-4 section-heading">Why I Built This.</h2>
-              <div className="mt-8 space-y-5 body-copy">
-                <p>Army at 18. Anti-piracy operations at sea, five years. Sales leadership in Nepal. Casino security shifts in Macau — building this on the side the whole time.</p>
-                <p>IFPA certified trainer. Studying digital marketing since 2022.</p>
-                <p>I have lived inside the fitness world and the business world. Not one or the other. I know what your daily grind looks like. I know what a broken client pipeline feels like.</p>
-                <p>I have been where you are. I just learned what was missing.</p>
-                <p className="font-semibold text-foreground">That is exactly why this system is built the way it is.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* ── S11: OBJECTIONS ── */}
         <section className="border-t border-line py-18 sm:py-24">
           <div className="section-shell">
@@ -598,6 +513,7 @@ export default function GroundZeroPage() {
                   Book My Free 30-Min Strategy Call
                 </a>
               </div>
+              <p className="mx-auto mt-8 max-w-2xl text-sm text-muted">Ground Zero is where we start. What comes after — Mission Active, Total Command, walking away — is your call at month 3. Today is just about whether the foundation is right.</p>
             </div>
           </div>
         </section>
