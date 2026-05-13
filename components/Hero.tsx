@@ -44,17 +44,6 @@ export default function Hero({ ctaText }: HeroProps) {
                   Start building the system that brings clients in — even if you have 100 followers.
                 </p>
 
-                <div className="mt-8 flex flex-col items-start gap-4">
-                  <a
-                    href="#lead-form"
-                    className="rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-[#17150f] shadow-[0_22px_50px_rgba(166,146,115,0.22)] hover:bg-[#b6a180]"
-                  >
-                    Send Me the System -&gt;
-                  </a>
-                  <p className="text-sm text-muted">
-                    Free. Instant. No pitch. Real coach. Real system.
-                  </p>
-                </div>
               </div>
             </div>
           </div>
