@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Benefits from "@/components/Benefits";
 import Hero from "@/components/Hero";
 import Problem from "@/components/Problem";
@@ -41,42 +40,6 @@ export default function HomePage() {
       <Problem zones={zones} />
       <Benefits items={whoItsFor} />
 
-      <section className="py-18 sm:py-24">
-        <div className="section-shell">
-          <div className="glass-panel relative overflow-hidden rounded-[2rem] p-6 sm:p-8 lg:p-10">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(74,82,64,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(166,146,115,0.14),transparent_30%)]" />
-            <div className="relative grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-              <article className="max-w-2xl">
-                <p className="section-label">Who Made This</p>
-                <h2 className="mt-4 section-heading">A coach who&apos;s been where you are.</h2>
-                <p className="body-copy mt-6">
-                  I&apos;m Yogesh Kaphle. Certified fitness coach. Digital marketer. I built this system because I watched too many great coaches in Nepal stay invisible online — while average coaches with marketing skills got all the clients. That&apos;s the gap I want to fix. Not by competing with you — by handing you what I learned the hard way.
-                </p>
-              </article>
-
-              <article className="relative overflow-hidden rounded-[1.8rem] border border-[#7b715b33] bg-[linear-gradient(180deg,#10130f_0%,#090a08_100%)] p-3 shadow-[0_24px_80px_rgba(0,0,0,0.28)] lg:aspect-[4/3]">
-                <div className="absolute -left-8 top-12 h-32 w-32 rounded-full bg-brand/30 blur-3xl" />
-                <div className="absolute -right-10 bottom-8 h-40 w-40 rounded-full bg-accent/16 blur-3xl" />
-                <div className="relative h-full overflow-hidden rounded-[1.5rem]">
-                  <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_32%,rgba(9,10,8,0.18)_66%,rgba(9,10,8,0.92)_100%)]" />
-                  <Image
-                    src="/hero-image.jpg"
-                    alt="Yogesh Kaphle"
-                    width={768}
-                    height={768}
-                    priority
-                    className="h-full w-full object-cover"
-                    style={{
-                      maskImage: "linear-gradient(to bottom, black 82%, transparent 100%)",
-                    }}
-                  />
-                </div>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <Urgency />
 
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-accent/20 bg-[#0b0d0a]/96 p-3 backdrop-blur-xl md:hidden">
@@ -90,7 +53,7 @@ export default function HomePage() {
 
       <footer className="border-t border-line py-8">
         <div className="section-shell text-center text-sm text-muted">
-          &copy; 2026 Yogesh Kaphle | yogeshkaphle.com &mdash; Fitness Inside Out. Business Built In.
+          &copy; 2026 Yogesh Kaphle &mdash; Certified Fitness Coach and Digital Marketer. Built for Fitness Coaches in Nepal. | yogeshkaphle.com
         </div>
       </footer>
     </main>
