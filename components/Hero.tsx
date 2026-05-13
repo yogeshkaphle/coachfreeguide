@@ -9,7 +9,7 @@ export default function Hero({ ctaText }: HeroProps) {
   return (
     <section className="relative overflow-hidden pb-18 pt-5 sm:pb-24 sm:pt-6">
       <div className="section-shell">
-        <nav className="mb-8 flex items-center justify-between rounded-full border border-line bg-[#0b0d0a]/80 px-4 py-3 backdrop-blur-xl sm:px-5">
+        <nav className="mb-8 flex items-center rounded-full border border-line bg-[#0b0d0a]/80 px-4 py-3 backdrop-blur-xl sm:px-5">
           <a href="#top" className="flex items-center gap-3">
             <Image
               src="/yogesh-kaphle-logo.png"
@@ -19,12 +19,6 @@ export default function Hero({ ctaText }: HeroProps) {
               priority
               className="h-10 w-auto sm:h-14"
             />
-          </a>
-          <a
-            href="#lead-form"
-            className="rounded-full border border-accent/40 bg-accent/12 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#f1e8d7] hover:border-accent/70 hover:bg-accent/18 whitespace-nowrap"
-          >
-            Get Free Access →
           </a>
         </nav>
 
@@ -43,6 +37,18 @@ export default function Hero({ ctaText }: HeroProps) {
                 <p className="mt-5 max-w-2xl text-lg leading-8 text-[#d3cab9] sm:text-xl">
                   Start building the system that brings clients in — even if you have 100 followers.
                 </p>
+
+                <div className="mt-8">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Inside this kit:</p>
+                  <ul className="mt-4 space-y-3">
+                    {["15-minute video walkthrough (in Nepali)", "The Mind Map PDF", "Action worksheet to apply it this week"].map((item) => (
+                      <li key={item} className="flex items-start gap-3 text-sm leading-7 text-[#d3cab9]">
+                        <span className="mt-0.5 text-accent">→</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
               </div>
             </div>
