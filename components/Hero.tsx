@@ -9,15 +9,15 @@ export default function Hero({ ctaText }: HeroProps) {
   return (
     <section className="relative overflow-hidden pb-18 pt-5 sm:pb-24 sm:pt-6">
       <div className="section-shell">
-        <nav className="mb-8 flex items-center rounded-full border border-line bg-[#0b0d0a]/80 px-4 py-3 backdrop-blur-xl sm:px-5">
-          <a href="#top" className="flex items-center gap-3">
+        <nav className="mb-8 flex items-center justify-center rounded-full border border-line bg-[#0b0d0a]/80 px-4 py-3 backdrop-blur-xl sm:px-5">
+          <a href="#top">
             <Image
-              src="/yogesh-kaphle-logo.png"
-              alt="Yogesh Kaphle"
-              width={208}
-              height={64}
+              src="/YK_Logo_With_Tagline.png"
+              alt="Yogesh Kaphle — Fitness Inside Out. Business Built In."
+              width={4555}
+              height={895}
               priority
-              className="h-10 w-auto sm:h-14"
+              className="h-8 w-auto sm:h-10"
             />
           </a>
         </nav>
