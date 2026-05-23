@@ -37,24 +37,16 @@ export default function ThankYouPage() {
           </p>
         </div>
 
-        {/* Video — 16:9 responsive, max 900px centered */}
+        {/* Video — 16:9 responsive Vimeo embed, max 900px centered */}
         <div className="mx-auto mt-10 max-w-[900px] sm:mt-12">
-          <div
-            className="relative overflow-hidden rounded-xl"
-            style={{ paddingBottom: "56.25%", height: 0 }}
-          >
+          <div style={{ padding: "56.25% 0 0 0", position: "relative", borderRadius: "12px", overflow: "hidden" }}>
             <iframe
-              src="https://www.youtube.com/embed/PLACEHOLDER_VIDEO_ID?rel=0"
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                border: 0,
-              }}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
+              src="https://player.vimeo.com/video/1194999704?h=0&title=0&byline=0&portrait=0&controls=1&dnt=1"
+              frameBorder="0"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+              title="5 Steps to turn Viewers into Paying Clients"
             />
           </div>
         </div>
@@ -62,20 +54,20 @@ export default function ThankYouPage() {
         {/* Kit Links */}
         <div className="mx-auto mt-10 flex flex-col items-center gap-4 sm:mt-12 sm:flex-row sm:justify-center">
           <a
+            href="/worksheet"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full rounded-full bg-[#3D4A2E] px-8 py-4 text-center text-base font-semibold text-white hover:opacity-90 sm:w-fit sm:px-10"
+          >
+            Open the Worksheet →
+          </a>
+          <a
             href="/mindmap"
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full rounded-full border-[1.5px] border-[#C2A96A] bg-transparent px-8 py-4 text-center text-base font-semibold text-[#C2A96A] hover:bg-[#C2A96A]/10 sm:w-fit sm:px-10"
           >
             View the Mind Map →
-          </a>
-          <a
-            href="/worksheet"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full rounded-full border-[1.5px] border-[#C2A96A] bg-transparent px-8 py-4 text-center text-base font-semibold text-[#C2A96A] hover:bg-[#C2A96A]/10 sm:w-fit sm:px-10"
-          >
-            Open the Worksheet →
           </a>
         </div>
 
