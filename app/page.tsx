@@ -36,7 +36,7 @@ const whoItsFor = [
 export default function HomePage() {
   return (
     <main id="top" className="relative overflow-x-hidden pb-28 md:pb-0">
-      <Hero ctaText="Send Me the System ->" />
+      <Hero ctaText="Send Me the System →" />
       <Problem zones={zones} />
       <Benefits items={whoItsFor} />
 
@@ -47,7 +47,7 @@ export default function HomePage() {
           href="#lead-form"
           className="flex items-center justify-center rounded-full bg-accent px-5 py-3 text-sm font-semibold text-[#17150f]"
         >
-          Send Me the System -&gt;
+          Send Me the System →
         </a>
       </div>
 

@@ -1,107 +1,97 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
-type FormValues = {
-  name: string;
-  whatsapp: string;
-  email: string;
-  struggle: string;
-};
+const FORM_ID = "6a15328a32a8cfa107df9938";
+const FORMSPREE_URL = "https://formspree.io/f/mwvzwljk";
 
-type FormErrors = Partial<Record<keyof FormValues, string>>;
-
-const initialValues: FormValues = {
-  name: "",
-  whatsapp: "",
-  email: "",
-  struggle: "",
-};
-
-const struggleOptions = [
-  "I post regularly but nobody inquires about coaching",
-  "People ask questions but never become paying clients",
-  "I don't know what content is actually working",
-  "My page is growing but my income isn't",
-  "I tried boosting posts but wasted money and got nothing",
-  "Something else",
-];
-
-function validateEmail(email: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function validate(values: FormValues) {
-  const errors: FormErrors = {};
-
-  if (!values.name.trim()) errors.name = "Please enter your name.";
-  if (!values.whatsapp.trim()) errors.whatsapp = "Please enter your WhatsApp number.";
-  if (!values.email.trim()) errors.email = "Please enter your email address.";
-  else if (!validateEmail(values.email)) errors.email = "Please enter a valid email address.";
-  if (!values.struggle.trim()) errors.struggle = "Please choose your biggest struggle.";
-
-  return errors;
-}
-
-type CTAFormProps = {
-  ctaText: string;
-};
+type CTAFormProps = { ctaText: string };
 
 export default function CTAForm({ ctaText }: CTAFormProps) {
   const router = useRouter();
-  const [values, setValues] = useState<FormValues>(initialValues);
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [struggle, setStruggle] = useState("");
+  const [struggleError, setStruggleError] = useState("");
+  const struggleRef = useRef(struggle);
 
-  const handleSubmit = async (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    const nextErrors = validate(values);
-    setErrors(nextErrors);
+  useEffect(() => {
+    struggleRef.current = struggle;
+  }, [struggle]);
 
-    if (Object.keys(nextErrors).length > 0) {
-      return;
+  // Initialize Flodesk SDK via direct script injection so the form:handle
+  // call is queued BEFORE universal.js loads — avoids Next.js onLoad timing issues.
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const win = window as any;
+    win.FlodeskObject = "fd";
+    win.fd = win.fd || function () { (win.fd.q = win.fd.q || []).push(arguments); };
+    win.fd("form:handle", { formId: FORM_ID, rootEl: `.ff-${FORM_ID}` });
+    if (!document.querySelector('script[src*="assets.flodesk.com/universal"]')) {
+      const s = document.createElement("script");
+      s.src = "https://assets.flodesk.com/universal.js";
+      s.async = true;
+      document.head.appendChild(s);
     }
+  }, []);
 
-    setIsSubmitting(true);
-    setSubmitError(null);
+  useEffect(() => {
+    const formEl = document.querySelector<HTMLFormElement>('[data-ff-el="form"]');
+    const rootEl = document.querySelector(`[data-ff-el="root"].ff-${FORM_ID}`);
+    if (!formEl || !rootEl) return;
 
-    try {
-      const response = await fetch("https://formspree.io/f/mwvzwljk", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          name: values.name,
-          whatsapp: values.whatsapp,
-          email: values.email,
-          struggle: values.struggle,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Submission failed");
+    const onSubmit = (e: Event) => {
+      if (!struggleRef.current) {
+        e.preventDefault();
+        setStruggleError("Please choose your biggest struggle.");
+        return;
       }
+      setStruggleError("");
+      const get = (name: string) =>
+        (formEl.querySelector(`[name="${name}"]`) as HTMLInputElement)?.value ?? "";
+      sessionStorage.setItem(
+        "leadFormData",
+        JSON.stringify({
+          firstName: get("firstName"),
+          email: get("email"),
+          whatsapp: get("fields.whatsappNumber"),
+          struggle: struggleRef.current,
+        })
+      );
+    };
 
+    formEl.addEventListener("submit", onSubmit);
+
+    const handleSuccess = async () => {
+      const raw = sessionStorage.getItem("leadFormData");
+      if (raw) {
+        try {
+          await fetch(FORMSPREE_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: raw,
+          });
+        } catch {
+          // silent — Flodesk already captured the lead
+        }
+      }
+      await new Promise((r) => setTimeout(r, 1500));
+      sessionStorage.removeItem("leadFormData");
       router.push("/thank-you");
-    } catch {
-      setSubmitError("Something went wrong. Please try again.");
-      setIsSubmitting(false);
-    }
-  };
+    };
 
-  const updateField = (field: keyof FormValues, value: string) => {
-    setValues((current) => ({ ...current, [field]: value }));
+    const observer = new MutationObserver(() => {
+      if (rootEl.getAttribute("data-ff-stage") === "success") {
+        observer.disconnect();
+        handleSuccess();
+      }
+    });
+    observer.observe(rootEl, { attributes: true, attributeFilter: ["data-ff-stage"] });
 
-    if (errors[field]) {
-      setErrors((current) => ({ ...current, [field]: undefined }));
-    }
-  };
-
-  const fieldClassName =
-    "mt-2 w-full rounded-2xl border border-line bg-[#0c0f0b] px-4 py-3.5 text-sm text-foreground outline-none placeholder:text-[#8b8578] focus:border-accent focus:ring-2 focus:ring-[#a6927330]";
-
-  const errorClassName = "mt-2 text-sm text-danger";
+    return () => {
+      formEl.removeEventListener("submit", onSubmit);
+      observer.disconnect();
+    };
+  }, [router]);
 
   return (
     <div
@@ -115,88 +105,173 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
         </h2>
       </div>
 
-      <form className="space-y-4" noValidate onSubmit={handleSubmit}>
-        <div>
-          <label className="text-sm font-medium text-[#f4eddf]" htmlFor="name">
-            Your Name
-          </label>
-          <input
-            id="name"
-            type="text"
-            placeholder="Enter your full name"
-            value={values.name}
-            onChange={(event) => updateField("name", event.target.value)}
-            className={fieldClassName}
-          />
-          {errors.name ? <p className={errorClassName}>{errors.name}</p> : null}
-        </div>
+      {/* ── Flodesk root ── exact structure required by Flodesk JS ── */}
+      <div
+        className={`ff-${FORM_ID}`}
+        data-ff-el="root"
+        data-ff-version="3"
+        data-ff-type="inline"
+        data-ff-name="inlineNoImage"
+        data-ff-stage="default"
+      >
+        <div
+          data-ff-el="config"
+          data-ff-config="eyJ0cmlnZ2VyIjp7Im1vZGUiOiJpbW1lZGlhdGVseSIsInZhbHVlIjowfSwib25TdWNjZXNzIjp7Im1vZGUiOiJtZXNzYWdlIiwibWVzc2FnZSI6IjxkaXYgZGF0YS1wYXJhZ3JhcGg9XCJ0cnVlXCI+R290IGl0ISBDaGVjayB5b3VyIGluYm94IGZvciBhbiBlbWFpbCB0byBjb25maXJtIHlvdXIgc3Vic2NyaXB0aW9uLjwvZGl2PiIsInJlZGlyZWN0VXJsIjoiIn0sImNvaSI6dHJ1ZSwic2hvd0ZvclJldHVyblZpc2l0b3JzIjp0cnVlLCJub3RpZmljYXRpb24iOnRydWUsImdkcHIiOnsiYWNjZXB0c01hcmtldGluZyI6ZmFsc2UsInByaXZhY3lQb2xpY3kiOnsiZW5hYmxlZCI6ZmFsc2UsIm1hbmRhdG9yeSI6ZmFsc2V9fSwidHJhY2tpbmdDb25maWciOnsibWV0YVBpeGVsSWQiOiIiLCJjb29raWVCYW5uZXJFbmFibGVkIjpmYWxzZSwiZ29vZ2xlQW5hbHl0aWNzSWQiOiIifX0="
+          style={{ display: "none" }}
+        />
+        <div className={`ff-${FORM_ID}__container`}>
+          <div className={`ff-${FORM_ID}__wrapper`}>
+            <form
+              className={`ff-${FORM_ID}__form`}
+              action={`https://form.flodesk.com/forms/${FORM_ID}/submit`}
+              method="post"
+              data-ff-el="form"
+            >
+              {/* Title & subtitle hidden via CSS — we use outer heading instead */}
+              <div className={`ff-${FORM_ID}__title`}>
+                <div style={{ wordBreak: "break-word" }}>
+                  <div data-paragraph="true"><i><strong>The 5-Step Coach System</strong></i></div>
+                </div>
+              </div>
+              <div className={`ff-${FORM_ID}__subtitle`}>
+                <div style={{ wordBreak: "break-word" }}>
+                  <div data-paragraph="true"><span style={{ fontWeight: 700 }}>From Viewer to Paying Client</span></div>
+                  <div data-paragraph="true">Start building the system that brings clients in - even if you have 100 followers.</div>
+                </div>
+              </div>
 
-        <div>
-          <label className="text-sm font-medium text-[#f4eddf]" htmlFor="whatsapp">
-            WhatsApp Number
-          </label>
-          <input
-            id="whatsapp"
-            type="tel"
-            placeholder="98XXXXXXXX"
-            value={values.whatsapp}
-            onChange={(event) => updateField("whatsapp", event.target.value)}
-            className={fieldClassName}
-          />
-          {errors.whatsapp ? <p className={errorClassName}>{errors.whatsapp}</p> : null}
-        </div>
+              <div className={`ff-${FORM_ID}__content fd-form-content`} data-ff-el="content">
+                <div className={`ff-${FORM_ID}__fields`} data-ff-el="fields">
 
-        <div>
-          <label className="text-sm font-medium text-[#f4eddf]" htmlFor="email">
-            Email Address
-          </label>
-          <input
-            id="email"
-            type="email"
-            required
-            placeholder="Enter your active email"
-            value={values.email}
-            onChange={(event) => updateField("email", event.target.value)}
-            className={fieldClassName}
-          />
-          {errors.email ? <p className={errorClassName}>{errors.email}</p> : null}
-        </div>
+                  {/* First name */}
+                  <div className={`ff-${FORM_ID}__field fd-form-group`}>
+                    <p className="field-label">First Name</p>
+                    <input
+                      id={`ff-${FORM_ID}-firstName`}
+                      className={`ff-${FORM_ID}__control fd-form-control`}
+                      type="text"
+                      maxLength={255}
+                      name="firstName"
+                      placeholder="Enter your first name"
+                      data-ff-tab="firstName::email"
+                      required
+                    />
+                    <label
+                      htmlFor={`ff-${FORM_ID}-firstName`}
+                      className={`ff-${FORM_ID}__label fd-form-label`}
+                    >
+                      <div><div>First name</div></div>
+                    </label>
+                  </div>
 
-        <div>
-          <label className="text-sm font-medium text-[#f4eddf]" htmlFor="struggle">
-            What&apos;s your biggest struggle right now?
-          </label>
-          <select
-            id="struggle"
-            value={values.struggle}
-            onChange={(event) => updateField("struggle", event.target.value)}
-            className={fieldClassName}
-          >
-            <option value="" disabled>Select one...</option>
-            {struggleOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-          {errors.struggle ? <p className={errorClassName}>{errors.struggle}</p> : null}
-        </div>
+                  {/* Email */}
+                  <div className={`ff-${FORM_ID}__field fd-form-group`}>
+                    <p className="field-label">Email Address</p>
+                    <input
+                      id={`ff-${FORM_ID}-email`}
+                      className={`ff-${FORM_ID}__control fd-form-control`}
+                      type="text"
+                      maxLength={255}
+                      name="email"
+                      placeholder="Enter your active email"
+                      data-ff-tab="email:firstName:fields.whatsappNumber"
+                      required
+                    />
+                    <label
+                      htmlFor={`ff-${FORM_ID}-email`}
+                      className={`ff-${FORM_ID}__label fd-form-label`}
+                    >
+                      <div><div>Email address</div></div>
+                    </label>
+                  </div>
 
-        <div className="space-y-3 pt-2">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="flex w-full items-center justify-center rounded-full bg-accent px-5 py-3.5 text-sm font-semibold text-[#17150f] shadow-[0_18px_40px_rgba(166,146,115,0.2)] hover:bg-[#b6a180] disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            {isSubmitting ? "Sending..." : ctaText}
-          </button>
-          {submitError ? <p className="text-sm text-danger">{submitError}</p> : null}
-          <p className="text-sm text-muted">We respect your privacy. No spam.</p>
-          <p className="text-sm text-[#ddd1be]">
-            I&apos;ll also follow up on WhatsApp personally - not a bot.
-          </p>
+                  {/* WhatsApp */}
+                  <div className={`ff-${FORM_ID}__field fd-form-group`}>
+                    <p className="field-label">WhatsApp Number</p>
+                    <input
+                      id={`ff-${FORM_ID}-PF5MExzvGD`}
+                      className={`ff-${FORM_ID}__control fd-form-control`}
+                      type="text"
+                      maxLength={255}
+                      name="fields.whatsappNumber"
+                      placeholder="98XXXXXXXX"
+                      data-ff-tab="fields.whatsappNumber:email:submit"
+                      required
+                    />
+                    <label
+                      htmlFor={`ff-${FORM_ID}-PF5MExzvGD`}
+                      className={`ff-${FORM_ID}__label fd-form-label`}
+                    >
+                      <div><div>Whatsapp Number</div></div>
+                    </label>
+                  </div>
+
+                  {/* Honeypot — must stay exactly as Flodesk provided */}
+                  <input
+                    type="text"
+                    maxLength={255}
+                    name="confirm_email_address"
+                    style={{ display: "none" }}
+                  />
+                </div>
+
+                {/* Struggle dropdown — React-controlled, Formspree only */}
+                <div className="struggle-field">
+                  <label className="struggle-label" htmlFor="struggle">
+                    What&apos;s your biggest struggle right now?
+                  </label>
+                  <select
+                    id="struggle"
+                    value={struggle}
+                    onChange={(e) => {
+                      setStruggle(e.target.value);
+                      setStruggleError("");
+                    }}
+                    className="struggle-select"
+                  >
+                    <option value="" disabled>Select one...</option>
+                    <option value="I post regularly but nobody inquires about coaching">I post regularly but nobody inquires about coaching</option>
+                    <option value="People ask questions but never become paying clients">People ask questions but never become paying clients</option>
+                    <option value="I don't know what content is actually working">I don&apos;t know what content is actually working</option>
+                    <option value="My page is growing but my income isn't">My page is growing but my income isn&apos;t</option>
+                    <option value="I tried boosting posts but wasted money and got nothing">I tried boosting posts but wasted money and got nothing</option>
+                    <option value="Something else">Something else</option>
+                  </select>
+                  {struggleError && <p className="struggle-error">{struggleError}</p>}
+                </div>
+
+                <div className={`ff-${FORM_ID}__footer`} data-ff-el="footer">
+                  <button
+                    type="submit"
+                    className={`ff-${FORM_ID}__button fd-btn`}
+                    data-ff-el="submit"
+                    data-ff-tab="submit"
+                  >
+                    <div><span data-draw-element="editable">{ctaText}</span></div>
+                  </button>
+                </div>
+              </div>
+
+              <div className={`ff-${FORM_ID}__success fd-form-success`} data-ff-el="success">
+                <div className={`ff-${FORM_ID}__success-message`}>
+                  <div><div>
+                    <div data-paragraph="true">Got it! Check your inbox for an email to confirm your subscription.</div>
+                  </div></div>
+                </div>
+              </div>
+              <div className={`ff-${FORM_ID}__error fd-form-error`} data-ff-el="error" />
+            </form>
+          </div>
         </div>
-      </form>
+      </div>
+
+      <div className="mt-3 space-y-1">
+        <p className="text-sm text-muted">We respect your privacy. No spam.</p>
+        <p className="text-sm text-[#ddd1be]">
+          I&apos;ll also follow up on WhatsApp personally - not a bot.
+        </p>
+      </div>
+
     </div>
   );
 }
