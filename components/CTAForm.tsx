@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 
 type FormValues = {
   name: string;
@@ -53,8 +53,9 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     const nextErrors = validate(values);
     setErrors(nextErrors);
@@ -64,8 +65,29 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
     }
 
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 700));
-    router.push("/thank-you");
+    setSubmitError(null);
+
+    try {
+      const response = await fetch("https://formspree.io/f/mwvzwljk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: values.name,
+          whatsapp: values.whatsapp,
+          email: values.email,
+          struggle: values.struggle,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Submission failed");
+      }
+
+      router.push("/thank-you");
+    } catch {
+      setSubmitError("Something went wrong. Please try again.");
+      setIsSubmitting(false);
+    }
   };
 
   const updateField = (field: keyof FormValues, value: string) => {
@@ -168,6 +190,7 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
           >
             {isSubmitting ? "Sending..." : ctaText}
           </button>
+          {submitError ? <p className="text-sm text-danger">{submitError}</p> : null}
           <p className="text-sm text-muted">We respect your privacy. No spam.</p>
           <p className="text-sm text-[#ddd1be]">
             I&apos;ll also follow up on WhatsApp personally - not a bot.
