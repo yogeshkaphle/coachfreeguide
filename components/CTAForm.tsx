@@ -14,9 +14,12 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
   const [struggleError, setStruggleError] = useState("");
   const struggleRef = useRef(struggle);
 
-  useEffect(() => {
-    struggleRef.current = struggle;
-  }, [struggle]);
+  const [robotChecked, setRobotChecked] = useState(false);
+  const [robotError, setRobotError] = useState("");
+  const robotRef = useRef(robotChecked);
+
+  useEffect(() => { struggleRef.current = struggle; }, [struggle]);
+  useEffect(() => { robotRef.current = robotChecked; }, [robotChecked]);
 
   // Initialize Flodesk SDK via direct script injection so the form:handle
   // call is queued BEFORE universal.js loads — avoids Next.js onLoad timing issues.
@@ -40,12 +43,27 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
     if (!formEl || !rootEl) return;
 
     const onSubmit = (e: Event) => {
+      let hasError = false;
+
       if (!struggleRef.current) {
-        e.preventDefault();
         setStruggleError("Please choose your biggest struggle.");
+        hasError = true;
+      } else {
+        setStruggleError("");
+      }
+
+      if (!robotRef.current) {
+        setRobotError("Please confirm you're not a robot.");
+        hasError = true;
+      } else {
+        setRobotError("");
+      }
+
+      if (hasError) {
+        e.preventDefault();
         return;
       }
-      setStruggleError("");
+
       const get = (name: string) =>
         (formEl.querySelector(`[name="${name}"]`) as HTMLInputElement)?.value ?? "";
       sessionStorage.setItem(
@@ -238,6 +256,24 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
                     <option value="Something else">Something else</option>
                   </select>
                   {struggleError && <p className="struggle-error">{struggleError}</p>}
+                </div>
+
+                {/* Robot check — visible before submit */}
+                <div className="robot-field">
+                  <label className="robot-label" htmlFor="robot-check">
+                    <input
+                      id="robot-check"
+                      type="checkbox"
+                      checked={robotChecked}
+                      onChange={(e) => {
+                        setRobotChecked(e.target.checked);
+                        setRobotError("");
+                      }}
+                      className="robot-checkbox"
+                    />
+                    <span>I am not a robot</span>
+                  </label>
+                  {robotError && <p className="robot-error">{robotError}</p>}
                 </div>
 
                 <div className={`ff-${FORM_ID}__footer`} data-ff-el="footer">
