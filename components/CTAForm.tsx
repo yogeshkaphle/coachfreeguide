@@ -86,10 +86,11 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
     });
     stageObserver.observe(rootEl, { attributes: true, attributeFilter: ["data-ff-stage"] });
 
-    // When Flodesk injects the Cloudflare Turnstile widget, label it and scroll it into view
-    let turnstileLabelInjected = false;
+    // When Flodesk injects the Cloudflare Turnstile widget, show a focused overlay
+    let overlayShown = false;
+    let tokenRelay: MutationObserver | null = null;
     const turnstileObserver = new MutationObserver((mutations) => {
-      if (turnstileLabelInjected) return;
+      if (overlayShown) return;
       for (const mutation of mutations) {
         for (const node of Array.from(mutation.addedNodes)) {
           if (node.nodeType !== Node.ELEMENT_NODE) continue;
@@ -101,33 +102,89 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
             el.tagName === "IFRAME" &&
             (el as HTMLIFrameElement).getAttribute("src")?.includes("challenges.cloudflare.com")
           ) {
-            target = el;
+            // Navigate up to the cf-turnstile container, or use the iframe's parent
+            target = el.closest(".cf-turnstile") ?? el.parentElement ?? el;
           } else {
-            target =
-              el.querySelector(".cf-turnstile") ||
-              el.querySelector('iframe[src*="challenges.cloudflare.com"]');
+            target = el.querySelector(".cf-turnstile") ?? null;
           }
-          if (target) {
-            turnstileLabelInjected = true;
-            const label = document.createElement("p");
-            label.className = "ff-turnstile-label";
-            label.textContent = "Last step — tick the box below to get your kit ✓";
-            target.parentElement?.insertBefore(label, target);
-            setTimeout(() => {
-              label.scrollIntoView({ behavior: "smooth", block: "center" });
-            }, 150);
-            turnstileObserver.disconnect();
-            return;
-          }
+          if (!target) continue;
+
+          overlayShown = true;
+          turnstileObserver.disconnect();
+
+          // Full-screen backdrop
+          const backdrop = document.createElement("div");
+          backdrop.id = "ff-turnstile-backdrop";
+          backdrop.style.cssText =
+            "position:fixed;inset:0;background:rgba(9,10,8,0.88);z-index:9998;";
+          document.body.appendChild(backdrop);
+
+          // Centered card
+          const card = document.createElement("div");
+          card.id = "ff-turnstile-card";
+          card.style.cssText = [
+            "position:fixed",
+            "top:50%",
+            "left:50%",
+            "transform:translate(-50%,-50%)",
+            "z-index:9999",
+            "background:#0c0f0b",
+            "border:1px solid rgba(166,146,115,0.28)",
+            "border-radius:1.5rem",
+            "padding:32px 28px 28px",
+            "text-align:center",
+            "width:min(380px,calc(100vw - 40px))",
+            "box-shadow:0 32px 80px rgba(0,0,0,0.5)",
+            "font-family:inherit",
+          ].join(";");
+
+          const heading = document.createElement("p");
+          heading.textContent = "One last step";
+          heading.style.cssText =
+            "margin:0 0 8px;font-size:1.5rem;font-weight:700;color:#a69273;font-family:inherit;";
+
+          const sub = document.createElement("p");
+          sub.textContent = "Tick the box and your kit is on its way.";
+          sub.style.cssText =
+            "margin:0 0 20px;font-size:0.875rem;color:#d3cab9;font-family:inherit;";
+
+          // Relocate only the visual widget; keep the form's other fields intact
+          const capturedTarget = target;
+          card.appendChild(heading);
+          card.appendChild(sub);
+          card.appendChild(capturedTarget);
+          document.body.appendChild(card);
+
+          // Safety net: if Cloudflare injects the response token inside the relocated
+          // element (some configurations), mirror it back into the original form
+          tokenRelay = new MutationObserver(() => {
+            const tokenInput = capturedTarget.querySelector(
+              'input[name="cf-turnstile-response"]'
+            );
+            if (tokenInput && !formEl.querySelector('input[name="cf-turnstile-response"]')) {
+              const mirror = tokenInput.cloneNode(true) as HTMLInputElement;
+              formEl.appendChild(mirror);
+              tokenRelay!.disconnect();
+            }
+          });
+          tokenRelay.observe(capturedTarget, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+          });
+
+          return;
         }
       }
     });
-    turnstileObserver.observe(rootEl, { childList: true, subtree: true });
+    // Watch document.body — Flodesk may inject outside rootEl
+    turnstileObserver.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       formEl.removeEventListener("submit", onSubmit);
       stageObserver.disconnect();
       turnstileObserver.disconnect();
+      tokenRelay?.disconnect();
     };
   }, [router]);
 
