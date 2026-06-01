@@ -14,12 +14,7 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
   const [struggleError, setStruggleError] = useState("");
   const struggleRef = useRef(struggle);
 
-  const [robotChecked, setRobotChecked] = useState(false);
-  const [robotError, setRobotError] = useState("");
-  const robotRef = useRef(robotChecked);
-
   useEffect(() => { struggleRef.current = struggle; }, [struggle]);
-  useEffect(() => { robotRef.current = robotChecked; }, [robotChecked]);
 
   // Initialize Flodesk SDK via direct script injection so the form:handle
   // call is queued BEFORE universal.js loads — avoids Next.js onLoad timing issues.
@@ -43,26 +38,12 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
     if (!formEl || !rootEl) return;
 
     const onSubmit = (e: Event) => {
-      let hasError = false;
-
       if (!struggleRef.current) {
         setStruggleError("Please choose your biggest struggle.");
-        hasError = true;
-      } else {
-        setStruggleError("");
-      }
-
-      if (!robotRef.current) {
-        setRobotError("Please confirm you're not a robot.");
-        hasError = true;
-      } else {
-        setRobotError("");
-      }
-
-      if (hasError) {
         e.preventDefault();
         return;
       }
+      setStruggleError("");
 
       const get = (name: string) =>
         (formEl.querySelector(`[name="${name}"]`) as HTMLInputElement)?.value ?? "";
@@ -97,17 +78,56 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
       router.push("/thank-you");
     };
 
-    const observer = new MutationObserver(() => {
+    const stageObserver = new MutationObserver(() => {
       if (rootEl.getAttribute("data-ff-stage") === "success") {
-        observer.disconnect();
+        stageObserver.disconnect();
         handleSuccess();
       }
     });
-    observer.observe(rootEl, { attributes: true, attributeFilter: ["data-ff-stage"] });
+    stageObserver.observe(rootEl, { attributes: true, attributeFilter: ["data-ff-stage"] });
+
+    // When Flodesk injects the Cloudflare Turnstile widget, label it and scroll it into view
+    let turnstileLabelInjected = false;
+    const turnstileObserver = new MutationObserver((mutations) => {
+      if (turnstileLabelInjected) return;
+      for (const mutation of mutations) {
+        for (const node of Array.from(mutation.addedNodes)) {
+          if (node.nodeType !== Node.ELEMENT_NODE) continue;
+          const el = node as Element;
+          let target: Element | null = null;
+          if (el.classList.contains("cf-turnstile")) {
+            target = el;
+          } else if (
+            el.tagName === "IFRAME" &&
+            (el as HTMLIFrameElement).getAttribute("src")?.includes("challenges.cloudflare.com")
+          ) {
+            target = el;
+          } else {
+            target =
+              el.querySelector(".cf-turnstile") ||
+              el.querySelector('iframe[src*="challenges.cloudflare.com"]');
+          }
+          if (target) {
+            turnstileLabelInjected = true;
+            const label = document.createElement("p");
+            label.className = "ff-turnstile-label";
+            label.textContent = "Last step — tick the box below to get your kit ✓";
+            target.parentElement?.insertBefore(label, target);
+            setTimeout(() => {
+              label.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 150);
+            turnstileObserver.disconnect();
+            return;
+          }
+        }
+      }
+    });
+    turnstileObserver.observe(rootEl, { childList: true, subtree: true });
 
     return () => {
       formEl.removeEventListener("submit", onSubmit);
-      observer.disconnect();
+      stageObserver.disconnect();
+      turnstileObserver.disconnect();
     };
   }, [router]);
 
@@ -256,24 +276,6 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
                     <option value="Something else">Something else</option>
                   </select>
                   {struggleError && <p className="struggle-error">{struggleError}</p>}
-                </div>
-
-                {/* Robot check — visible before submit */}
-                <div className="robot-field">
-                  <label className="robot-label" htmlFor="robot-check">
-                    <input
-                      id="robot-check"
-                      type="checkbox"
-                      checked={robotChecked}
-                      onChange={(e) => {
-                        setRobotChecked(e.target.checked);
-                        setRobotError("");
-                      }}
-                      className="robot-checkbox"
-                    />
-                    <span>I am not a robot</span>
-                  </label>
-                  {robotError && <p className="robot-error">{robotError}</p>}
                 </div>
 
                 <div className={`ff-${FORM_ID}__footer`} data-ff-el="footer">
