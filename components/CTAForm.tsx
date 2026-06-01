@@ -35,7 +35,59 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
   useEffect(() => {
     const formEl = document.querySelector<HTMLFormElement>('[data-ff-el="form"]');
     const rootEl = document.querySelector(`[data-ff-el="root"].ff-${FORM_ID}`);
-    if (!formEl || !rootEl) return;
+    const formCard = document.getElementById("lead-form");
+    if (!formEl || !rootEl || !formCard) return;
+
+    let overlayActive = false;
+    let safetyTimer: ReturnType<typeof setTimeout> | null = null;
+    let injectedHeading: HTMLElement | null = null;
+
+    const removeOverlay = () => {
+      if (!overlayActive) return;
+      overlayActive = false;
+      if (safetyTimer) { clearTimeout(safetyTimer); safetyTimer = null; }
+      document.getElementById("ff-turnstile-backdrop")?.remove();
+      formCard.style.position = "";
+      formCard.style.zIndex = "";
+      injectedHeading?.remove();
+      injectedHeading = null;
+    };
+
+    const showOverlay = () => {
+      if (overlayActive) return;
+      overlayActive = true;
+
+      // Full-screen backdrop — dims everything behind the form card
+      const backdrop = document.createElement("div");
+      backdrop.id = "ff-turnstile-backdrop";
+      backdrop.style.cssText =
+        "position:fixed;inset:0;background:rgba(9,10,8,0.88);z-index:9998;pointer-events:none;";
+      document.body.appendChild(backdrop);
+
+      // Raise the form card above the backdrop so it's the only lit element
+      formCard.style.position = "relative";
+      formCard.style.zIndex = "9999";
+
+      // Prepend heading inside the form card to orient the user
+      const heading = document.createElement("div");
+      heading.id = "ff-turnstile-heading";
+      heading.style.cssText = "margin-bottom:16px;";
+      const h = document.createElement("p");
+      h.textContent = "One last step";
+      h.style.cssText =
+        "margin:0 0 4px;font-size:1.375rem;font-weight:700;color:#a69273;font-family:inherit;";
+      const sub = document.createElement("p");
+      sub.textContent = "Tick the “I’m not a robot” box to get your kit.";
+      sub.style.cssText =
+        "margin:0;font-size:0.875rem;color:#d3cab9;font-family:inherit;";
+      heading.appendChild(h);
+      heading.appendChild(sub);
+      formCard.insertBefore(heading, formCard.firstChild);
+      injectedHeading = heading;
+
+      // Safety net: clear overlay after 6 s if neither Turnstile nor redirect fires
+      safetyTimer = setTimeout(removeOverlay, 6000);
+    };
 
     const onSubmit = (e: Event) => {
       if (!struggleRef.current) {
@@ -56,6 +108,9 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
           struggle: struggleRef.current,
         })
       );
+
+      // Dim the page and spotlight the form card so the Turnstile widget is unmissable
+      showOverlay();
     };
 
     formEl.addEventListener("submit", onSubmit);
@@ -86,105 +141,10 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
     });
     stageObserver.observe(rootEl, { attributes: true, attributeFilter: ["data-ff-stage"] });
 
-    // When Flodesk injects the Cloudflare Turnstile widget, show a focused overlay
-    let overlayShown = false;
-    let tokenRelay: MutationObserver | null = null;
-    const turnstileObserver = new MutationObserver((mutations) => {
-      if (overlayShown) return;
-      for (const mutation of mutations) {
-        for (const node of Array.from(mutation.addedNodes)) {
-          if (node.nodeType !== Node.ELEMENT_NODE) continue;
-          const el = node as Element;
-          let target: Element | null = null;
-          if (el.classList.contains("cf-turnstile")) {
-            target = el;
-          } else if (
-            el.tagName === "IFRAME" &&
-            (el as HTMLIFrameElement).getAttribute("src")?.includes("challenges.cloudflare.com")
-          ) {
-            // Navigate up to the cf-turnstile container, or use the iframe's parent
-            target = el.closest(".cf-turnstile") ?? el.parentElement ?? el;
-          } else {
-            target = el.querySelector(".cf-turnstile") ?? null;
-          }
-          if (!target) continue;
-
-          overlayShown = true;
-          turnstileObserver.disconnect();
-
-          // Full-screen backdrop
-          const backdrop = document.createElement("div");
-          backdrop.id = "ff-turnstile-backdrop";
-          backdrop.style.cssText =
-            "position:fixed;inset:0;background:rgba(9,10,8,0.88);z-index:9998;";
-          document.body.appendChild(backdrop);
-
-          // Centered card
-          const card = document.createElement("div");
-          card.id = "ff-turnstile-card";
-          card.style.cssText = [
-            "position:fixed",
-            "top:50%",
-            "left:50%",
-            "transform:translate(-50%,-50%)",
-            "z-index:9999",
-            "background:#0c0f0b",
-            "border:1px solid rgba(166,146,115,0.28)",
-            "border-radius:1.5rem",
-            "padding:32px 28px 28px",
-            "text-align:center",
-            "width:min(380px,calc(100vw - 40px))",
-            "box-shadow:0 32px 80px rgba(0,0,0,0.5)",
-            "font-family:inherit",
-          ].join(";");
-
-          const heading = document.createElement("p");
-          heading.textContent = "One last step";
-          heading.style.cssText =
-            "margin:0 0 8px;font-size:1.5rem;font-weight:700;color:#a69273;font-family:inherit;";
-
-          const sub = document.createElement("p");
-          sub.textContent = "Tick the box and your kit is on its way.";
-          sub.style.cssText =
-            "margin:0 0 20px;font-size:0.875rem;color:#d3cab9;font-family:inherit;";
-
-          // Relocate only the visual widget; keep the form's other fields intact
-          const capturedTarget = target;
-          card.appendChild(heading);
-          card.appendChild(sub);
-          card.appendChild(capturedTarget);
-          document.body.appendChild(card);
-
-          // Safety net: if Cloudflare injects the response token inside the relocated
-          // element (some configurations), mirror it back into the original form
-          tokenRelay = new MutationObserver(() => {
-            const tokenInput = capturedTarget.querySelector(
-              'input[name="cf-turnstile-response"]'
-            );
-            if (tokenInput && !formEl.querySelector('input[name="cf-turnstile-response"]')) {
-              const mirror = tokenInput.cloneNode(true) as HTMLInputElement;
-              formEl.appendChild(mirror);
-              tokenRelay!.disconnect();
-            }
-          });
-          tokenRelay.observe(capturedTarget, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-          });
-
-          return;
-        }
-      }
-    });
-    // Watch document.body — Flodesk may inject outside rootEl
-    turnstileObserver.observe(document.body, { childList: true, subtree: true });
-
     return () => {
       formEl.removeEventListener("submit", onSubmit);
       stageObserver.disconnect();
-      turnstileObserver.disconnect();
-      tokenRelay?.disconnect();
+      removeOverlay();
     };
   }, [router]);
 
