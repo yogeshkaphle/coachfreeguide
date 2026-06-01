@@ -57,11 +57,7 @@ export default function RootLayout({
       lang="en"
       className={`${cormorant.variable} ${manrope.variable} h-full scroll-smooth antialiased`}
     >
-      <head>
-        <link rel="preload" href="https://assets.flodesk.com/flodesk-sans.css" as="style" />
-        <link rel="stylesheet" href="https://assets.flodesk.com/flodesk-sans.css" />
-      </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+<body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }
