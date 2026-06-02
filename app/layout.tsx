@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
+import MetaPixel from "@/components/MetaPixel";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -57,7 +58,10 @@ export default function RootLayout({
       lang="en"
       className={`${cormorant.variable} ${manrope.variable} h-full scroll-smooth antialiased`}
     >
-<body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <MetaPixel />
+        {children}
+      </body>
     </html>
   );
 }

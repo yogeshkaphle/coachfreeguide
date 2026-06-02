@@ -7,6 +7,12 @@ const FORMSPREE_URL = "https://formspree.io/f/mwvzwljk";
 
 type CTAFormProps = { ctaText: string };
 
+declare global {
+  interface Window {
+    fbq?: (...args: unknown[]) => void;
+  }
+}
+
 export default function CTAForm({ ctaText }: CTAFormProps) {
   const router = useRouter();
   const [firstName, setFirstName] = useState("");
@@ -25,11 +31,14 @@ export default function CTAForm({ ctaText }: CTAFormProps) {
     setStruggleError("");
     setSubmitting(true);
     try {
-      await fetch(FORMSPREE_URL, {
+      const response = await fetch(FORMSPREE_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({ firstName, email, whatsapp, struggle }),
       });
+      if (response.ok && typeof window !== "undefined" && window.fbq) {
+        window.fbq("track", "Lead");
+      }
     } catch {
       // silent — redirect regardless
     }
